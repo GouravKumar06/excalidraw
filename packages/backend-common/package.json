@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "type": "module",
   "scripts": {
     "build": "tsc"
   },

@@ -6,6 +6,7 @@ dotenv.config()
 import { JWT_SECRET } from '@repo/backend-common';
 import { authMiddleware } from './middleware.js';
 import { SignUpSchema, LoginSchema,CreateRoomSchema } from '@repo/common/types';
+import { prismaClient } from '@repo/database/client';
 
 const app = express();
 const PORT = 3001;

@@ -138,6 +138,51 @@ app.post('/create-room',authMiddleware, async(req, res) => {
     }    
 });   
 
+app.get("/chats/:roomId", authMiddleware, async(req,res) => {
+
+    const roomId = Number(req.params.roomId);
+
+    try{
+        const chats = await prismaClient.chat.findMany({
+            where: {
+                roomId: roomId
+            },
+            orderBy:{
+                id: "desc"
+            },
+            take: 50
+        });
+
+        res.json({ chats });
+    }catch(error){
+        console.error("Error fetching chats:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
+app.get("/room/:slug", async(req,res) => {
+
+    const slug = req.params.slug;
+
+    try{
+        const room = await prismaClient.room.findUnique({
+            where: {
+                slug: slug
+            }
+        });
+
+        if (!room) {
+            return res.status(404).json({ message: "Room not found" });
+        }
+
+        res.json({ room });
+    }catch(error){
+        console.error("Error fetching room:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
